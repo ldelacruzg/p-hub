@@ -1,6 +1,6 @@
 import fs from 'fs';
 import readline from 'readline';
-import {Hub, convertStringToNumberArray, convertArrayToHub} from './ds/Hub'
+import {Hub, convertStringToNumberArray, convertArrayToHub, selectServers} from './ds/Hub'
 
 const filePath = 'src/data/phub_50_5_1.txt';
 
@@ -32,10 +32,5 @@ rl.on('line', (line: string) => {
 
 // Close
 rl.on('close', () => {
-    console.log({
-        totalHubs,
-        numberServers,
-        capacityServers,
-        hubs
-    });
+    console.log(Object.values(selectServers(numberServers, hubs))[0]);
 });
