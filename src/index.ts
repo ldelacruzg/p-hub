@@ -2,6 +2,8 @@ import fs from "fs";
 import readline from "readline";
 import { convertArrayToHub, convertStringToNumberArray, Hub } from "./ds/Hub";
 import { addRandomClientsToServer, getRandomServers } from "./ds/Server";
+import { Plots } from "./ds/Plots";
+
 
 const filePath = "src/data/phub_50_5_2.txt";
 
@@ -52,4 +54,8 @@ rl.on("close", () => {
 
   // Show solution
   console.log({ solution, serversWithClients });
+
+  // Show plot
+  const plots = new Plots();
+  plots.showPlot(serversWithClients);
 });
