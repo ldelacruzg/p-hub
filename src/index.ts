@@ -1,9 +1,8 @@
 import fs from "fs";
 import readline from "readline";
 import { convertArrayToHub, convertStringToNumberArray, Hub } from "./ds/Hub";
-import { addRandomClientsToServer, getRandomServers } from "./ds/Server";
-import { Plots } from "./ds/Plots";
-
+import { Plots } from "./util/Plots";
+import { phub } from "./p-hub";
 
 const filePath = "src/data/phub_50_5_2.txt";
 
@@ -11,7 +10,6 @@ const filePath = "src/data/phub_50_5_2.txt";
 let totalHubs: number = 0;
 let quantityServers: number = 0;
 let capacityServers: number = 0;
-let solution = 0;
 
 const hubs: Hub[] = [];
 
@@ -37,25 +35,10 @@ rl.on("line", (line: string) => {
 
 // Finish reading the file
 rl.on("close", () => {
-  // The servers are obtained randomly
-  const servers = getRandomServers(quantityServers, hubs);
-  //console.log(servers);
-
-  // Add clients to servers randomly
-  const serversWithClients = servers.map((server) => {
-    addRandomClientsToServer(server, capacityServers, hubs);
-    return server;
-  });
-
-  // The solution is obtained
-  solution = serversWithClients
-    .map((server) => server.totalDistance!)
-    .reduce((previous, current) => previous + current);
-
-  // Show solution
-  console.log({ solution, serversWithClients });
+  // Solution
+  const result = phub(hubs, quantityServers, capacityServers, 1000);
 
   // Show plot
   const plots = new Plots();
-  plots.showPlot(serversWithClients);
+  plots.showPlot(result.serversWithConnections);
 });
