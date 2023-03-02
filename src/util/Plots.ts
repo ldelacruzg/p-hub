@@ -1,8 +1,9 @@
 import { plot, Plot } from "nodeplotlib";
 import { Server } from "../ds/Server";
+import { PHubSolution } from "../p-hub";
 
 export class Plots {
-  public showPlot(servers: Server[]) {
+  public showPlot({ solution, servers }: PHubSolution) {
     const plots: Plot[] = [];
     const traceClients: Plot[] = [];
     const colors = [
@@ -42,6 +43,10 @@ export class Plots {
       });
     });
 
-    plot([...plots, ...traceClients], { width: 900, height: 600 });
+    plot([...plots, ...traceClients], {
+      width: 900,
+      height: 600,
+      title: `P-HUB | Distance: ${solution.toFixed(2)}`,
+    });
   }
 }

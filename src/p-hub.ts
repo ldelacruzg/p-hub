@@ -1,13 +1,16 @@
+import { Client } from "./ds/Client";
 import { Hub } from "./ds/Hub";
 import {
-  addRandomClientsToServer,
+  addClientToServer,
   getRandomServers,
+  removeItemById,
   Server,
 } from "./ds/Server";
+import { getRandom } from "./util/Random";
 
-interface PHubSolution {
+export interface PHubSolution {
   solution: number;
-  serversWithConnections: Server[];
+  servers: Server[];
 }
 
 export function pHubOneSolution(
@@ -16,20 +19,26 @@ export function pHubOneSolution(
   capacityServers: number
 ): PHubSolution {
   // The servers are obtained randomly
-  const servers = getRandomServers(quantityServers, hubs);
+  const servers = getRandomServers(quantityServers, hubs, capacityServers);
 
   // Add clients to servers randomly
-  const serversWithConnections = servers.map((server) => {
-    addRandomClientsToServer(server, capacityServers, hubs);
-    return server;
-  });
+  while (hubs.length > 0) {
+    const rndIndexServer = getRandom(quantityServers);
+    const rndIndexClient = getRandom(hubs.length);
+
+    const server = servers.at(rndIndexServer);
+    const client = hubs.at(rndIndexClient) as Client;
+
+    addClientToServer(server!, client);
+    removeItemById(rndIndexClient, hubs);
+  }
 
   // The solution is obtained
-  const solution = serversWithConnections
+  const solution = servers
     .map((server) => server.totalDistance!)
     .reduce((previous, current) => previous + current);
 
-  return { solution, serversWithConnections };
+  return { solution, servers };
 }
 
 export function phub(

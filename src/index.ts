@@ -40,5 +40,5 @@ rl.on("close", () => {
 
   // Show plot
   const plots = new Plots();
-  plots.showPlot(result.serversWithConnections);
+  plots.showPlot(result);
 });
